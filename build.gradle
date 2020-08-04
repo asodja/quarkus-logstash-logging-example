@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+}
+
+repositories {
+     mavenLocal()
+     mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    implementation 'io.quarkus:quarkus-resteasy-jsonb'
+    implementation platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-resteasy'
+    implementation "io.quarkus:quarkus-scheduler"
+    implementation "net.logstash.logback:logstash-logback-encoder:6.4"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+}
+
+configurations.all {
+    exclude group: "org.jboss.slf4j", module: "slf4j-jboss-logging"
+}
+
+
+group 'my-groupId'
+version 'my-version'
+
+quarkusDev {
+    System.properties.setProperty("logback.configurationFile", "$project.projectDir/src/main/resources/logback.xml")
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
